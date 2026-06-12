@@ -98,10 +98,12 @@ export default defineI18nConfig(() => ({
         },
         sidebar: {
           oracles: "Oracoli",
+          oraclesDesc: "Seleziona un oracolo per consultarlo",
           close: "Chiudi",
         },
         prompts: {
           title: "Prompt",
+          desc: "Prompt per generare mappe con ChatGPT",
           hint: "Clicca per scaricare il file .md",
           mapGen: "Genera Mappa Zona Contaminata",
         },
@@ -327,10 +329,12 @@ export default defineI18nConfig(() => ({
         },
         sidebar: {
           oracles: "Oracles",
+          oraclesDesc: "Select an oracle to consult",
           close: "Close",
         },
         prompts: {
           title: "Prompts",
+          desc: "Prompts for generating maps with ChatGPT",
           hint: "Click to download the .md file",
           mapGen: "Generate Wasteland Map",
         },

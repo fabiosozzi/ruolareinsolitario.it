@@ -182,21 +182,21 @@ watch(
   <div class="oracle-panel">
     <div class="bg-black/70 backdrop-blur-sm border border-green-700/50 rounded-lg p-2.5 printable">
       <div class="flex items-center gap-2 mb-2 border-b border-green-700/30 pb-1.5">
-        <span class="text-base">☠</span>
-        <h3 class="text-sm font-heading font-bold text-green-400 tracking-wider">
+        <span class="text-lg">☠</span>
+        <h3 class="text-base font-heading font-bold text-green-400 tracking-wider">
           {{ t('vtt.oracles.encounters.title') }}
         </h3>
       </div>
 
       <div class="flex items-end gap-2 mb-2">
-        <h3 class="text-base font-heading font-semibold text-green-400 flex-1">
+        <h3 class="text-lg font-heading font-semibold text-green-400 flex-1">
           {{ t('vtt.oracles.encounters.encounterMatrix') }}
         </h3>
-        <div v-if="rolledValues.matrix !== null" class="text-sm text-green-400 font-heading whitespace-nowrap">
+        <div v-if="rolledValues.matrix !== null" class="text-base text-green-400 font-heading whitespace-nowrap">
           {{ t('vtt.oracles.encounters.result') }}: {{ rolledValues.matrix }}
         </div>
         <button
-          class="px-2 py-1 text-xs font-heading bg-green-700/60 hover:bg-green-600/70 border border-green-700/50 rounded text-green-100 cursor-pointer transition-all focus-visible:ring-2 focus-visible:ring-green-400/60 active:scale-[0.98]"
+          class="px-2 py-1 text-sm font-heading bg-green-700/60 hover:bg-green-600/70 border border-green-700/50 rounded text-green-100 cursor-pointer transition-all focus-visible:ring-2 focus-visible:ring-green-400/60 active:scale-[0.98]"
           @click="rollForTable('matrix')"
         >
           1d20
@@ -204,7 +204,7 @@ watch(
       </div>
 
       <div class="overflow-x-auto mb-2">
-        <table class="w-full text-sm border-collapse">
+        <table class="w-full text-base border-collapse">
           <thead>
             <tr class="bg-green-900/40">
               <th class="border border-green-700/30 px-1 py-0.5 text-green-400 font-heading text-left">
@@ -250,7 +250,7 @@ watch(
           </tbody>
           <tbody v-else>
             <tr>
-              <td colspan="6" class="border border-green-700/30 px-2 py-3 text-center text-xs text-green-400/40 italic">
+              <td colspan="6" class="border border-green-700/30 px-2 py-3 text-center text-sm text-green-400/40 italic">
                 {{ t('vtt.oracles.encounters.selectCharacter') }}
               </td>
             </tr>
@@ -258,7 +258,7 @@ watch(
         </table>
       </div>
 
-      <h3 class="text-base font-heading font-semibold text-green-400 mb-1">
+      <h3 class="text-lg font-heading font-semibold text-green-400 mb-1">
         {{ t('vtt.oracles.encounters.locationTables') }}
       </h3>
 
@@ -269,21 +269,21 @@ watch(
         >
           <div>
             <div class="flex items-center gap-1 mb-0.5">
-              <h3 class="text-sm font-heading font-semibold text-green-400 flex-1">
+              <h3 class="text-base font-heading font-semibold text-green-400 flex-1">
                 {{ t(loc.titleKey) }}
               </h3>
-              <div v-if="rolledValues[`cat-${li}`] !== null" class="text-xs text-green-400 font-heading whitespace-nowrap">
+              <div v-if="rolledValues[`cat-${li}`] !== null" class="text-sm text-green-400 font-heading whitespace-nowrap">
                 {{ t('vtt.oracles.encounters.result') }}: {{ rolledValues[`cat-${li}`] }}
               </div>
               <button
-                class="px-2 py-1 text-xs font-heading bg-green-700/60 hover:bg-green-600/70 border border-green-700/50 rounded text-green-100 cursor-pointer transition-all focus-visible:ring-2 focus-visible:ring-green-400/60 active:scale-[0.98]"
+                class="px-2 py-1 text-sm font-heading bg-green-700/60 hover:bg-green-600/70 border border-green-700/50 rounded text-green-100 cursor-pointer transition-all focus-visible:ring-2 focus-visible:ring-green-400/60 active:scale-[0.98]"
                 @click="rollForTable(`cat-${li}`)"
               >
                 1d20
               </button>
             </div>
 
-            <table class="w-full text-sm border-collapse">
+            <table class="w-full text-base border-collapse">
               <thead>
                 <tr class="bg-green-900/40">
                   <th class="border border-green-700/30 px-1 py-0.5 text-green-400 font-heading text-left w-6">

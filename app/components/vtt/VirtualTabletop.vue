@@ -16,7 +16,7 @@ const { t } = useI18n()
     <div class="absolute inset-0 bg-black/40" />
 
     <div class="relative z-10 h-full grid grid-cols-[auto_1fr_auto] grid-rows-1 gap-2 p-2">
-      <div v-if="config.characterComponent" class="w-48 min-h-0">
+      <div v-if="config.characterComponent" class="w-56 min-h-0">
         <VttCharacterPanel :component="config.characterComponent" />
       </div>
       <div class="flex-1 min-w-0">

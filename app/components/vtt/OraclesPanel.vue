@@ -44,15 +44,15 @@ function handleKeydown(e: KeyboardEvent) {
     >
       <div
         v-if="isOpen"
-        class="fixed inset-y-0 right-0 z-50 w-full max-w-[90vw] bg-black/90 backdrop-blur-md border-l border-green-700/50 shadow-2xl flex flex-col font-terminal"
+        class="fixed inset-y-0 right-0 z-50 w-full max-w-[min(90vw,70rem)] bg-black/90 backdrop-blur-md border-l border-green-700/50 shadow-2xl flex flex-col font-terminal"
       >
         <div class="flex items-center justify-between p-3 border-b border-green-700/30">
-          <h2 class="text-sm font-heading font-semibold text-green-400">
+          <h2 class="text-base font-heading font-semibold text-green-400">
             {{ activeOracleLabel }}
           </h2>
           <button
             ref="closeBtn"
-            class="px-2 py-1 text-sm text-green-400 hover:text-white border border-green-700/50 rounded cursor-pointer"
+            class="px-2 py-1 text-base text-green-400 hover:text-white border border-green-700/50 rounded cursor-pointer"
             @click="close"
           >
             {{ t('vtt.sidebar.close') }}

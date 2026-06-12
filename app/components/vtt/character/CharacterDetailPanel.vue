@@ -37,15 +37,15 @@ function handleKeydown(e: KeyboardEvent) {
     >
       <div
         v-if="isOpen"
-        class="fixed inset-y-0 left-0 z-50 w-full max-w-2xl bg-black/90 backdrop-blur-md border-r border-green-700/50 shadow-2xl flex flex-col font-terminal"
+        class="fixed inset-y-0 left-0 z-50 w-full max-w-[min(90vw,56rem)] bg-black/90 backdrop-blur-md border-r border-green-700/50 shadow-2xl flex flex-col font-terminal"
       >
         <div class="flex items-center justify-between p-3 border-b border-green-700/30">
-          <h2 class="text-sm font-heading font-semibold text-green-400">
+          <h2 class="text-base font-heading font-semibold text-green-400">
             {{ t('vtt.character.title') }}
           </h2>
           <button
             ref="closeBtn"
-            class="px-2 py-1 text-sm text-green-400 hover:text-white border border-green-700/50 rounded cursor-pointer transition-colors"
+            class="px-2 py-1 text-base text-green-400 hover:text-white border border-green-700/50 rounded cursor-pointer transition-colors"
             @click="close"
           >
             {{ t('vtt.sidebar.close') }}

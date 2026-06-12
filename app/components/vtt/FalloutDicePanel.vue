@@ -113,7 +113,7 @@ function clearSession() {
 
 <template>
   <div class="bg-black/70 backdrop-blur-sm border border-green-700/50 rounded-lg p-3 text-white">
-    <h3 class="text-sm font-heading font-semibold text-green-400 mb-3">
+    <h3 class="text-base font-heading font-semibold text-green-400 mb-3">
       {{ t('vtt.dice.roll') }}
     </h3>
 
@@ -121,7 +121,7 @@ function clearSession() {
       <button
         v-for="m in (['prova', 'danni', 'custom'] as const)"
         :key="m"
-        class="flex-1 px-2 py-1.5 text-sm font-heading border rounded transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-green-400/60 active:scale-[0.98]"
+        class="flex-1 px-2 py-1.5 text-base font-heading border rounded transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-green-400/60 active:scale-[0.98]"
         :class="
           mode === m
             ? 'bg-green-700/60 border-green-500 text-white'
@@ -135,37 +135,37 @@ function clearSession() {
 
     <div v-if="mode === 'prova'" class="flex flex-wrap gap-2 items-end mb-3">
       <div>
-        <label class="text-sm text-green-300/80 font-heading">{{ t('vtt.dice.count') }} D20</label>
+        <label class="text-base text-green-300/80 font-heading">{{ t('vtt.dice.count') }} D20</label>
         <input
           v-model.number="provaCount"
           type="number"
           min="1"
           max="5"
-          class="block w-16 px-2 py-1 mt-0.5 text-sm bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors"
+          class="block w-16 px-2 py-1 mt-0.5 text-base bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors"
         />
       </div>
       <div>
-        <label class="text-sm text-green-300/80 font-heading">{{ t('vtt.dice.nb') }}</label>
+        <label class="text-base text-green-300/80 font-heading">{{ t('vtt.dice.nb') }}</label>
         <input
           v-model.number="nb"
           type="number"
           min="1"
           max="20"
-          class="block w-16 px-2 py-1 mt-0.5 text-sm bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors"
+          class="block w-16 px-2 py-1 mt-0.5 text-base bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors"
         />
       </div>
       <div>
-        <label class="text-sm text-green-300/80 font-heading">{{ t('vtt.dice.successesRequired') }}</label>
+        <label class="text-base text-green-300/80 font-heading">{{ t('vtt.dice.successesRequired') }}</label>
         <input
           v-model.number="successiRichiesti"
           type="number"
           min="1"
           max="10"
-          class="block w-16 px-2 py-1 mt-0.5 text-sm bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors"
+          class="block w-16 px-2 py-1 mt-0.5 text-base bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors"
         />
       </div>
       <button
-        class="px-3 py-1.5 text-sm font-heading bg-green-700/60 hover:bg-green-600/70 border border-green-700/50 rounded text-green-100 cursor-pointer focus-visible:ring-2 focus-visible:ring-green-400/60 active:scale-[0.98]"
+        class="px-3 py-1.5 text-base font-heading bg-green-700/60 hover:bg-green-600/70 border border-green-700/50 rounded text-green-100 cursor-pointer focus-visible:ring-2 focus-visible:ring-green-400/60 active:scale-[0.98]"
         @click="rollProva"
       >
         {{ t('vtt.dice.roll') }}
@@ -174,17 +174,17 @@ function clearSession() {
 
     <div v-if="mode === 'danni'" class="flex flex-wrap gap-2 items-end mb-3">
       <div>
-        <label class="text-sm text-green-300/80 font-heading">{{ t('vtt.dice.count') }} CD</label>
+        <label class="text-base text-green-300/80 font-heading">{{ t('vtt.dice.count') }} CD</label>
         <input
           v-model.number="danniCount"
           type="number"
           min="1"
           max="10"
-          class="block w-16 px-2 py-1 mt-0.5 text-sm bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors"
+          class="block w-16 px-2 py-1 mt-0.5 text-base bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors"
         />
       </div>
       <button
-        class="px-3 py-1.5 text-sm font-heading bg-green-700/60 hover:bg-green-600/70 border border-green-700/50 rounded text-green-100 cursor-pointer focus-visible:ring-2 focus-visible:ring-green-400/60 active:scale-[0.98]"
+        class="px-3 py-1.5 text-base font-heading bg-green-700/60 hover:bg-green-600/70 border border-green-700/50 rounded text-green-100 cursor-pointer focus-visible:ring-2 focus-visible:ring-green-400/60 active:scale-[0.98]"
         @click="rollDanni"
       >
         {{ t('vtt.dice.roll') }}
@@ -193,27 +193,27 @@ function clearSession() {
 
     <div v-if="mode === 'custom'" class="flex flex-wrap gap-2 items-end mb-3">
       <div>
-        <label class="text-sm text-green-300/80 font-heading">D20</label>
+        <label class="text-base text-green-300/80 font-heading">D20</label>
         <input
           v-model.number="customD20"
           type="number"
           min="0"
           max="5"
-          class="block w-16 px-2 py-1 mt-0.5 text-sm bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors"
+          class="block w-16 px-2 py-1 mt-0.5 text-base bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors"
         />
       </div>
       <div>
-        <label class="text-sm text-green-300/80 font-heading">CD</label>
+        <label class="text-base text-green-300/80 font-heading">CD</label>
         <input
           v-model.number="customCD"
           type="number"
           min="0"
           max="10"
-          class="block w-16 px-2 py-1 mt-0.5 text-sm bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors"
+          class="block w-16 px-2 py-1 mt-0.5 text-base bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors"
         />
       </div>
       <button
-        class="px-3 py-1.5 text-sm font-heading bg-green-700/60 hover:bg-green-600/70 border border-green-700/50 rounded text-green-100 cursor-pointer focus-visible:ring-2 focus-visible:ring-green-400/60 active:scale-[0.98]"
+        class="px-3 py-1.5 text-base font-heading bg-green-700/60 hover:bg-green-600/70 border border-green-700/50 rounded text-green-100 cursor-pointer focus-visible:ring-2 focus-visible:ring-green-400/60 active:scale-[0.98]"
         @click="rollCustom"
       >
         {{ t('vtt.dice.roll') }}
@@ -221,7 +221,7 @@ function clearSession() {
     </div>
 
     <div v-if="session.length" class="border-t border-green-700/30 pt-2">
-      <div class="text-sm text-green-300/80 font-heading mb-1">{{ t('vtt.dice.history') }}</div>
+      <div class="text-base text-green-300/80 font-heading mb-1">{{ t('vtt.dice.history') }}</div>
 
       <div class="max-h-48 overflow-y-auto overflow-x-hidden p-1 mb-2 space-y-2 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-green-900/30 [&::-webkit-scrollbar-thumb]:bg-green-700/50 [&::-webkit-scrollbar-thumb]:rounded">
         <div v-for="r in session" :key="r.id" class="relative p-3 border-t border-green-700/15 first:border-t-0 transition-all duration-300" :class="session[0]?.id === r.id ? 'ring-1 ring-green-400/60 rounded bg-green-900/20' : ''">
@@ -243,7 +243,7 @@ function clearSession() {
                 <VttDiceFace :value="v" type="d20" />
               </div>
             </div>
-            <div class="text-sm mt-1">
+            <div class="text-base mt-1">
               <span :class="r.passed ? 'text-green-400' : 'text-red-400'">
                 {{ r.successes }}/{{ r.successesRequired }} — {{ r.passed ? t('vtt.dice.passed') : t('vtt.dice.failed') }}
               </span>
@@ -259,9 +259,9 @@ function clearSession() {
                 type="fal-cd"
                 :icon="r.icons?.[j] ?? false"
               />
-              <span class="text-sm text-green-200">→ {{ r.total }} {{ t('vtt.dice.damage') }}</span>
+              <span class="text-base text-green-200">→ {{ r.total }} {{ t('vtt.dice.damage') }}</span>
             </div>
-            <div class="text-sm text-green-200/50 mt-1">
+            <div class="text-base text-green-200/50 mt-1">
               {{ t('vtt.dice.effects') }}: {{ r.effects }}
             </div>
           </template>
@@ -286,9 +286,9 @@ function clearSession() {
                 type="fal-cd"
                 :icon="r.icons?.[j] ?? false"
               />
-              <span class="text-sm text-green-200">→ {{ r.total }}</span>
+              <span class="text-base text-green-200">→ {{ r.total }}</span>
             </div>
-            <div class="text-sm text-green-200/50 mt-1">
+            <div class="text-base text-green-200/50 mt-1">
               {{ t('vtt.dice.effects') }}: {{ r.effects }}
             </div>
           </template>
@@ -297,14 +297,14 @@ function clearSession() {
 
 
       <button
-        class="mt-2 w-full px-2 py-1 text-sm text-green-300/80 hover:text-green-300 border border-green-700/30 hover:border-green-600/50 rounded transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-green-400/60"
+        class="mt-2 w-full px-2 py-1 text-base text-green-300/80 hover:text-green-300 border border-green-700/30 hover:border-green-600/50 rounded transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-green-400/60"
         @click="clearSession"
       >
         {{ t('vtt.dice.clear') }}
       </button>
     </div>
 
-    <div v-else class="text-sm text-green-200/40 italic border-t border-green-700/30 pt-2">
+    <div v-else class="text-base text-green-200/40 italic border-t border-green-700/30 pt-2">
       —
     </div>
   </div>

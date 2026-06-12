@@ -101,7 +101,7 @@ const label = computed(() => `${props.type}: ${props.value}`)
   </svg>
 
   <!-- fallback -->
-  <span v-else class="inline-flex items-center justify-center w-16 h-16 rounded text-sm font-bold shrink-0" :style="{ backgroundColor: c.bg, color: 'white' }" :aria-label="label" role="img">
+  <span v-else class="inline-flex items-center justify-center w-16 h-16 rounded text-base font-bold shrink-0" :style="{ backgroundColor: c.bg, color: 'white' }" :aria-label="label" role="img">
     {{ value }}
   </span>
 </template>

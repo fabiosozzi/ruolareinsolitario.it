@@ -188,18 +188,18 @@ const filteredMaps = computed(() => {
 
       <div v-if="editingMap" class="space-y-3">
         <div>
-          <label class="text-sm text-green-400/70 font-heading">{{ t('vtt.maps.fileName') }}</label>
+          <label class="text-base text-green-400/70 font-heading">{{ t('vtt.maps.fileName') }}</label>
           <input
             v-model="editingMap.name"
-            class="mt-1 w-full px-3 py-1.5 text-sm bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors"
+            class="mt-1 w-full px-3 py-1.5 text-base bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors"
           />
         </div>
         <div>
-          <label class="text-sm text-green-400/70 font-heading">{{ t('vtt.maps.description') }}</label>
+          <label class="text-base text-green-400/70 font-heading">{{ t('vtt.maps.description') }}</label>
           <textarea
             v-model="editingMap.description"
             rows="3"
-            class="mt-1 w-full px-3 py-1.5 text-sm bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors resize-none"
+            class="mt-1 w-full px-3 py-1.5 text-base bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors resize-none"
           />
         </div>
       </div>
@@ -217,13 +217,13 @@ const filteredMaps = computed(() => {
           <div class="flex-1 space-y-2 min-w-0">
             <input
               v-model="pf.name"
-              class="w-full px-2 py-1 text-sm bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors"
+              class="w-full px-2 py-1 text-base bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors"
             />
             <textarea
               v-model="pf.description"
               rows="2"
               placeholder="..."
-              class="w-full px-2 py-1 text-sm bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors resize-none"
+              class="w-full px-2 py-1 text-base bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors resize-none"
             />
           </div>
         </div>
@@ -260,7 +260,7 @@ const filteredMaps = computed(() => {
         v-if="isDragging"
         class="flex items-center justify-center h-full"
       >
-        <div class="text-green-400 text-lg font-heading text-center">
+        <div class="text-green-400 text-xl font-heading text-center">
           {{ t('vtt.maps.dragAndDrop') }}
         </div>
       </div>
@@ -270,10 +270,10 @@ const filteredMaps = computed(() => {
           <input
             v-model="searchQuery"
             :placeholder="t('vtt.maps.search')"
-            class="flex-1 px-3 py-1.5 text-sm bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors placeholder-green-200/30"
+            class="flex-1 px-3 py-1.5 text-base bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors placeholder-green-200/30"
           />
           <label
-            class="shrink-0 px-3 py-1.5 text-sm font-heading bg-green-800/40 hover:bg-green-700/60 border border-green-700/50 rounded transition-colors cursor-pointer"
+            class="shrink-0 px-3 py-1.5 text-base font-heading bg-green-800/40 hover:bg-green-700/60 border border-green-700/50 rounded transition-colors cursor-pointer"
           >
             {{ t('vtt.maps.upload') }}
             <input type="file" accept="image/*" multiple class="hidden" @change="handleFileInput" />
@@ -281,7 +281,7 @@ const filteredMaps = computed(() => {
         </div>
 
         <div v-if="maps.length" class="flex-1 overflow-y-auto">
-          <div class="grid grid-cols-4 gap-3">
+          <div class="grid grid-cols-6 gap-2">
             <div
               v-for="map in filteredMaps"
               :key="map.id"
@@ -296,21 +296,21 @@ const filteredMaps = computed(() => {
                 />
               </div>
               <div class="p-2">
-                <div class="text-sm text-green-200 font-heading truncate">{{ map.name }}</div>
+                <div class="text-base text-green-200 font-heading truncate">{{ map.name }}</div>
                 <p
                   v-if="map.description"
-                  class="text-sm text-green-200/50 leading-tight line-clamp-1 mt-0.5"
+                  class="text-base text-green-200/50 leading-tight line-clamp-1 mt-0.5"
                 >
                   {{ map.description }}
                 </p>
               </div>
               <div class="flex gap-1 px-2 pb-2">
                 <button
-                  class="flex items-center gap-1 px-2 py-1 text-sm text-green-400/70 hover:text-green-300 bg-green-900/30 hover:bg-green-800/40 rounded transition-colors cursor-pointer"
+                  class="flex items-center gap-1 px-2 py-1 text-base text-green-400/70 hover:text-green-300 bg-green-900/30 hover:bg-green-800/40 rounded transition-colors cursor-pointer"
                   @click.stop="openEdit(map)"
                 >✎ {{ t('vtt.maps.edit') }}</button>
                 <button
-                  class="flex items-center gap-1 px-2 py-1 text-sm text-red-400/70 hover:text-red-300 bg-red-900/20 hover:bg-red-800/30 rounded transition-colors cursor-pointer"
+                  class="flex items-center gap-1 px-2 py-1 text-base text-red-400/70 hover:text-red-300 bg-red-900/20 hover:bg-red-800/30 rounded transition-colors cursor-pointer"
                   @click.stop="removeMap(map.id)"
                 >× {{ t('vtt.maps.delete') }}</button>
               </div>
@@ -318,7 +318,7 @@ const filteredMaps = computed(() => {
           </div>
         </div>
 
-        <p v-else class="text-green-200/50 text-sm text-center mt-4">
+        <p v-else class="text-green-200/50 text-base text-center mt-4">
           {{ t('vtt.maps.noMaps') }}
         </p>
       </div>
@@ -343,20 +343,20 @@ const filteredMaps = computed(() => {
         />
       </div>
 
-      <div class="absolute top-2 left-2 bg-black/70 text-sm text-green-200 px-2 py-1 rounded pointer-events-none max-w-[60%]">
+      <div class="absolute top-2 left-2 bg-black/70 text-base text-green-200 px-2 py-1 rounded pointer-events-none max-w-[60%]">
         <div class="truncate font-heading">{{ activeMap.name }}</div>
         <p
           v-if="activeMap.description"
-          class="text-sm text-green-200/60 mt-0.5 leading-tight line-clamp-3"
+          class="text-base text-green-200/60 mt-0.5 leading-tight line-clamp-3"
         >
           {{ activeMap.description }}
         </p>
       </div>
-      <div class="absolute bottom-2 left-1/2 -translate-x-1/2 bg-black/70 text-sm text-green-400/60 px-2 py-1 rounded pointer-events-none whitespace-nowrap">
+      <div class="absolute bottom-2 left-1/2 -translate-x-1/2 bg-black/70 text-base text-green-400/60 px-2 py-1 rounded pointer-events-none whitespace-nowrap">
         {{ t('vtt.maps.clickToPlace') }}
       </div>
       <button
-        class="absolute top-2 right-2 px-2 py-1 text-sm bg-black/70 text-green-400 hover:text-white rounded cursor-pointer z-20"
+        class="absolute top-2 right-2 px-2 py-1 text-base bg-black/70 text-green-400 hover:text-white rounded cursor-pointer z-20"
         @click.stop="selectedMap = null"
       >
         ✕ {{ t('vtt.sidebar.close') }}
