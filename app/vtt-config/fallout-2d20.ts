@@ -11,7 +11,9 @@ export default {
     { type: 'fal-cd', label: 'CD', sides: 6, defaultCount: 1 },
   ],
   diceComponent: 'VttFalloutDicePanel',
+  characterComponent: 'VttCharacterFallout2d20CharacterSheet',
   oracles: [
     { id: 'structures', label: 'Strutture', component: 'VttOraclesFallout2d20Structures' },
+    { id: 'encounters', label: 'Incontri', component: 'VttOraclesFallout2d20Encounters' },
   ],
 } satisfies VttGameConfig

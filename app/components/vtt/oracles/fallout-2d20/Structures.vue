@@ -1,7 +1,26 @@
 <script setup lang="ts">
 const { t } = useI18n()
+import { dimensions } from '~/utils/fallout-2d20'
 
-const dimensions = ['small', 'medium', 'large', 'huge'] as const
+type TableId = 'matrix' | `cat-${number}`
+
+const rolledValues = ref<Record<TableId, number | null>>({
+  matrix: null,
+  'cat-0': null,
+  'cat-1': null,
+  'cat-2': null,
+  'cat-3': null,
+})
+
+function rollForTable(id: TableId) {
+  rolledValues.value[id] = Math.floor(Math.random() * 20) + 1
+}
+
+function isHighlighted(id: TableId, row: { min: number; max: number }): boolean {
+  const v = rolledValues.value[id]
+  if (v === null) return false
+  return v >= row.min && v <= row.max
+}
 
 interface MatrixRow {
   min: number
@@ -18,149 +37,62 @@ const matrixRows: MatrixRow[] = [
   { min: 16, max: 17, results: ['common_1', 'uncommon_1', 'uncommon_1', 'rare_1'] },
   { min: 18, max: 18, results: ['uncommon_1', 'uncommon_1', 'rare_1', 'rare_1'] },
   { min: 19, max: 19, results: ['uncommon_1', 'rare_1', 'rare_1', 'rare_1_uncommon_1'] },
-  { min: 20, max: 20, results: ['rare_1', 'rare_1_common_1', 'unique_1', 'unique_1'] },
+  { min: 20, max: 20, results: ['rare_1', 'rare_1_common_1', 'rare_2', 'rare_2'] },
 ]
 
-interface StructureRow {
+interface CategoryRow {
   min: number
   max: number
-  resultKey: string
+  common: string
+  uncommon: string
+  rare: string
 }
 
-interface RarityTable {
-  rarityKey: string
-  rows: StructureRow[]
-}
-
-interface StructureCategory {
+interface CategoryTable {
   titleKey: string
-  tables: RarityTable[]
+  rows: CategoryRow[]
 }
 
-const structureCategories: StructureCategory[] = [
+const categoryTables: CategoryTable[] = [
   {
     titleKey: 'vtt.oracles.structures.categories.settlements',
-    tables: [
-      {
-        rarityKey: 'vtt.oracles.structures.rarity.common',
-        rows: [
-          { min: 1, max: 12, resultKey: 'vtt.oracles.structures.items.cooking_station' },
-          { min: 13, max: 17, resultKey: 'vtt.oracles.structures.items.campfire' },
-          { min: 18, max: 20, resultKey: 'vtt.oracles.structures.items.working_terminal' },
-        ]
-      },
-      {
-        rarityKey: 'vtt.oracles.structures.rarity.uncommon',
-        rows: [
-          { min: 1, max: 12, resultKey: 'vtt.oracles.structures.items.workbench' },
-          { min: 13, max: 17, resultKey: 'vtt.oracles.structures.items.gunsmith_bench' },
-          { min: 18, max: 20, resultKey: 'vtt.oracles.structures.items.armorer_bench' },
-        ]
-      },
-      {
-        rarityKey: 'vtt.oracles.structures.rarity.rare',
-        rows: [
-          { min: 1, max: 10, resultKey: 'vtt.oracles.structures.items.gunsmith_bench' },
-          { min: 11, max: 17, resultKey: 'vtt.oracles.structures.items.armorer_bench' },
-          { min: 18, max: 20, resultKey: 'vtt.oracles.structures.items.prepared_shelter' },
-        ]
-      },
-    ]
+    rows: [
+      { min: 1, max: 10, common: 'cooking_station', uncommon: 'workbench', rare: 'gunsmith_bench' },
+      { min: 11, max: 12, common: 'cooking_station', uncommon: 'workbench', rare: 'armorer_bench' },
+      { min: 13, max: 14, common: 'campfire', uncommon: 'gunsmith_bench', rare: 'armorer_bench' },
+      { min: 15, max: 15, common: 'campfire', uncommon: 'gunsmith_bench', rare: 'armorer_bench' },
+      { min: 16, max: 17, common: 'campfire', uncommon: 'armorer_bench', rare: 'armorer_bench' },
+      { min: 18, max: 18, common: 'working_terminal', uncommon: 'armorer_bench', rare: 'prepared_shelter' },
+      { min: 19, max: 20, common: 'working_terminal', uncommon: 'armorer_bench', rare: 'prepared_shelter' },
+    ],
   },
   {
     titleKey: 'vtt.oracles.structures.categories.hospitals',
-    tables: [
-      {
-        rarityKey: 'vtt.oracles.structures.rarity.common',
-        rows: [
-          { min: 1, max: 10, resultKey: 'vtt.oracles.structures.items.working_terminal' },
-          { min: 11, max: 20, resultKey: 'vtt.oracles.structures.items.cooking_station' },
-        ]
-      },
-      {
-        rarityKey: 'vtt.oracles.structures.rarity.uncommon',
-        rows: [
-          { min: 1, max: 14, resultKey: 'vtt.oracles.structures.items.chemistry_bench' },
-          { min: 15, max: 20, resultKey: 'vtt.oracles.structures.items.medical_lab' },
-        ]
-      },
-      {
-        rarityKey: 'vtt.oracles.structures.rarity.rare',
-        rows: [
-          { min: 1, max: 12, resultKey: 'vtt.oracles.structures.items.medical_lab' },
-          { min: 13, max: 18, resultKey: 'vtt.oracles.structures.items.advanced_chemistry_bench' },
-          { min: 19, max: 20, resultKey: 'vtt.oracles.structures.items.research_center' },
-        ]
-      },
-    ]
+    rows: [
+      { min: 1, max: 10, common: 'working_terminal', uncommon: 'chemistry_bench', rare: 'medical_lab' },
+      { min: 11, max: 14, common: 'cooking_station', uncommon: 'chemistry_bench', rare: 'medical_lab' },
+      { min: 15, max: 18, common: 'cooking_station', uncommon: 'medical_lab', rare: 'advanced_chemistry_bench' },
+      { min: 19, max: 20, common: 'cooking_station', uncommon: 'medical_lab', rare: 'research_center' },
+    ],
   },
   {
     titleKey: 'vtt.oracles.structures.categories.factories',
-    tables: [
-      {
-        rarityKey: 'vtt.oracles.structures.rarity.common',
-        rows: [
-          { min: 1, max: 10, resultKey: 'vtt.oracles.structures.items.workbench' },
-          { min: 11, max: 20, resultKey: 'vtt.oracles.structures.items.working_terminal' },
-        ]
-      },
-      {
-        rarityKey: 'vtt.oracles.structures.rarity.uncommon',
-        rows: [
-          { min: 1, max: 10, resultKey: 'vtt.oracles.structures.items.gunsmith_bench' },
-          { min: 11, max: 17, resultKey: 'vtt.oracles.structures.items.armorer_bench' },
-          { min: 18, max: 20, resultKey: 'vtt.oracles.structures.items.robotics_workshop' },
-        ]
-      },
-      {
-        rarityKey: 'vtt.oracles.structures.rarity.rare',
-        rows: [
-          { min: 1, max: 10, resultKey: 'vtt.oracles.structures.items.armorer_bench' },
-          { min: 11, max: 17, resultKey: 'vtt.oracles.structures.items.robotics_workshop' },
-          { min: 18, max: 20, resultKey: 'vtt.oracles.structures.items.robot_recharge_station' },
-        ]
-      },
-    ]
+    rows: [
+      { min: 1, max: 10, common: 'workbench', uncommon: 'gunsmith_bench', rare: 'armorer_bench' },
+      { min: 11, max: 17, common: 'working_terminal', uncommon: 'armorer_bench', rare: 'robotics_workshop' },
+      { min: 18, max: 20, common: 'working_terminal', uncommon: 'robotics_workshop', rare: 'robot_recharge_station' },
+    ],
   },
   {
     titleKey: 'vtt.oracles.structures.categories.vaults',
-    tables: [
-      {
-        rarityKey: 'vtt.oracles.structures.rarity.common',
-        rows: [
-          { min: 1, max: 10, resultKey: 'vtt.oracles.structures.items.working_terminal' },
-          { min: 11, max: 20, resultKey: 'vtt.oracles.structures.items.workbench' },
-        ]
-      },
-      {
-        rarityKey: 'vtt.oracles.structures.rarity.uncommon',
-        rows: [
-          { min: 1, max: 8, resultKey: 'vtt.oracles.structures.items.gunsmith_bench' },
-          { min: 9, max: 14, resultKey: 'vtt.oracles.structures.items.armorer_bench' },
-          { min: 15, max: 20, resultKey: 'vtt.oracles.structures.items.chemistry_bench' },
-        ]
-      },
-      {
-        rarityKey: 'vtt.oracles.structures.rarity.rare',
-        rows: [
-          { min: 1, max: 8, resultKey: 'vtt.oracles.structures.items.robotics_workshop' },
-          { min: 9, max: 14, resultKey: 'vtt.oracles.structures.items.military_arsenal' },
-          { min: 15, max: 18, resultKey: 'vtt.oracles.structures.items.robot_command_center' },
-          { min: 19, max: 20, resultKey: 'vtt.oracles.structures.items.secret_lab' },
-        ]
-      },
-    ]
+    rows: [
+      { min: 1, max: 8, common: 'working_terminal', uncommon: 'gunsmith_bench', rare: 'robotics_workshop' },
+      { min: 9, max: 10, common: 'working_terminal', uncommon: 'armorer_bench', rare: 'military_arsenal' },
+      { min: 11, max: 14, common: 'workbench', uncommon: 'armorer_bench', rare: 'military_arsenal' },
+      { min: 15, max: 18, common: 'workbench', uncommon: 'chemistry_bench', rare: 'robot_command_center' },
+      { min: 19, max: 20, common: 'workbench', uncommon: 'chemistry_bench', rare: 'secret_lab' },
+    ],
   },
-]
-
-const uniqueRows: StructureRow[] = [
-  { min: 1, max: 5, resultKey: 'vtt.oracles.structures.items.full_military_arsenal' },
-  { min: 6, max: 9, resultKey: 'vtt.oracles.structures.items.fev_lab' },
-  { min: 10, max: 12, resultKey: 'vtt.oracles.structures.items.robot_command_center' },
-  { min: 13, max: 15, resultKey: 'vtt.oracles.structures.items.cryo_chamber' },
-  { min: 16, max: 18, resultKey: 'vtt.oracles.structures.items.vault_tec_reactor' },
-  { min: 19, max: 19, resultKey: 'vtt.oracles.structures.items.experimental_workshop' },
-  { min: 20, max: 20, resultKey: 'vtt.oracles.structures.items.intact_prewar_tech' },
 ]
 
 function rangeLabel(row: { min: number; max: number }): string {
@@ -170,28 +102,39 @@ function rangeLabel(row: { min: number; max: number }): string {
 
 <template>
   <div class="oracle-panel">
-    <div class="bg-gradient-to-b from-yellow-900/30 to-blue-900/30 border-2 border-yellow-700/60 rounded-lg p-4 printable">
-      <div class="flex items-center gap-2 mb-3 border-b border-yellow-700/30 pb-2">
-        <span class="text-lg">🏗</span>
-        <h3 class="text-lg font-heading font-bold text-yellow-400 tracking-wider">
+    <div class="bg-black/70 backdrop-blur-sm border border-green-700/50 rounded-lg p-2.5 printable">
+      <div class="flex items-center gap-2 mb-2 border-b border-green-700/30 pb-1.5">
+        <span class="text-base">⚙</span>
+        <h3 class="text-sm font-heading font-bold text-green-400 tracking-wider">
           {{ t('vtt.oracles.structures.title') }}
         </h3>
       </div>
 
-      <p class="text-xs text-yellow-300/80 mb-3 font-heading">
-        {{ t('vtt.oracles.structures.subtitle') }}
-      </p>
+      <div class="flex items-end gap-2 mb-2">
+        <h3 class="text-base font-heading font-semibold text-green-400 flex-1">
+          {{ t('vtt.oracles.structures.structuresFound') }}
+        </h3>
+        <div v-if="rolledValues.matrix !== null" class="text-sm text-green-400 font-heading whitespace-nowrap">
+          {{ t('vtt.oracles.structures.result') }}: {{ rolledValues.matrix }}
+        </div>
+        <button
+          class="px-2 py-1 text-xs font-heading bg-green-700/60 hover:bg-green-600/70 border border-green-700/50 rounded text-green-100 cursor-pointer transition-all focus-visible:ring-2 focus-visible:ring-green-400/60 active:scale-[0.98]"
+          @click="rollForTable('matrix')"
+        >
+          1d20
+        </button>
+      </div>
 
-      <table class="w-full text-xs border-collapse mb-4">
+      <table class="w-full text-sm border-collapse mb-2">
         <thead>
-          <tr class="bg-yellow-900/40">
-            <th class="border border-yellow-700/30 px-2 py-1.5 text-yellow-400 font-heading text-left">
+          <tr class="bg-green-900/40">
+            <th class="border border-green-700/30 px-1 py-0.5 text-green-400 font-heading text-left w-6">
               {{ t('vtt.oracles.structures.d20') }}
             </th>
             <th
               v-for="dim in dimensions"
               :key="dim"
-              class="border border-yellow-700/30 px-2 py-1.5 text-yellow-400 font-heading text-left"
+              class="border border-green-700/30 px-1 py-0.5 text-green-400 font-heading text-left"
             >
               {{ t(`vtt.oracles.structures.dimensions.${dim}`) }}
             </th>
@@ -201,15 +144,16 @@ function rangeLabel(row: { min: number; max: number }): string {
           <tr
             v-for="(row, i) in matrixRows"
             :key="i"
-            class="even:bg-yellow-900/10"
+            class="even:bg-green-900/10 transition-colors duration-300"
+            :class="isHighlighted('matrix', row) ? 'bg-green-700/30 ring-1 ring-green-500/60' : ''"
           >
-            <td class="border border-yellow-700/30 px-2 py-1 text-yellow-300 font-heading whitespace-nowrap">
+            <td class="border border-green-700/30 px-1 py-0.5 text-green-300 font-heading whitespace-nowrap">
               {{ rangeLabel(row) }}
             </td>
             <td
               v-for="(res, j) in row.results"
               :key="j"
-              class="border border-yellow-700/30 px-2 py-1 text-white"
+              class="border border-green-700/30 px-1 py-0.5 text-white"
             >
               {{ t(`vtt.oracles.structures.results.${res}`) }}
             </td>
@@ -217,74 +161,69 @@ function rangeLabel(row: { min: number; max: number }): string {
         </tbody>
       </table>
 
-      <template
-        v-for="(category, ci) in structureCategories"
-        :key="ci"
-      >
-        <h3 class="text-sm font-heading font-semibold text-yellow-400 mb-2 mt-4">
-          {{ t(category.titleKey) }}
-        </h3>
-
-        <template v-for="(table, ti) in category.tables" :key="ti">
-          <table class="w-full text-xs border-collapse mb-3">
-            <thead>
-              <tr class="bg-yellow-900/40">
-                <th class="border border-yellow-700/30 px-2 py-1 text-yellow-400 font-heading text-left w-12">
-                  {{ t('vtt.oracles.structures.d20') }}
-                </th>
-                <th class="border border-yellow-700/30 px-2 py-1 text-yellow-400 font-heading text-left">
-                  {{ t(table.rarityKey) }}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(row, ri) in table.rows"
-                :key="ri"
-                class="even:bg-yellow-900/10"
+      <div class="grid grid-cols-2 gap-3 mb-2">
+        <template
+          v-for="(cat, ci) in categoryTables"
+          :key="ci"
+        >
+          <div>
+            <div class="flex items-center gap-1 mb-0.5">
+              <h3 class="text-base font-heading font-semibold text-green-400 flex-1">
+                {{ t(cat.titleKey) }}
+              </h3>
+              <div v-if="rolledValues[`cat-${ci}`] !== null" class="text-xs text-green-400 font-heading whitespace-nowrap">
+                {{ t('vtt.oracles.structures.result') }}: {{ rolledValues[`cat-${ci}`] }}
+              </div>
+              <button
+                class="px-2 py-1 text-xs font-heading bg-green-700/60 hover:bg-green-600/70 border border-green-700/50 rounded text-green-100 cursor-pointer transition-all focus-visible:ring-2 focus-visible:ring-green-400/60 active:scale-[0.98]"
+                @click="rollForTable(`cat-${ci}`)"
               >
-                <td class="border border-yellow-700/30 px-2 py-1 text-yellow-300 font-heading">
-                  {{ rangeLabel(row) }}
-                </td>
-                <td class="border border-yellow-700/30 px-2 py-1 text-white">
-                  {{ t(row.resultKey) }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                1d20
+              </button>
+            </div>
+
+            <table class="w-full text-sm border-collapse">
+              <thead>
+                <tr class="bg-green-900/40">
+                  <th class="border border-green-700/30 px-1 py-0.5 text-green-400 font-heading text-left w-6">
+                    {{ t('vtt.oracles.structures.d20') }}
+                  </th>
+                  <th class="border border-green-700/30 px-1 py-0.5 text-green-400 font-heading text-left">
+                    {{ t('vtt.oracles.structures.rarity.common') }}
+                  </th>
+                  <th class="border border-green-700/30 px-1 py-0.5 text-green-400 font-heading text-left">
+                    {{ t('vtt.oracles.structures.rarity.uncommon') }}
+                  </th>
+                  <th class="border border-green-700/30 px-1 py-0.5 text-red-400 font-heading text-left">
+                    {{ t('vtt.oracles.structures.rarity.rare') }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="(row, ri) in cat.rows"
+                  :key="ri"
+                  class="even:bg-green-900/10 transition-colors duration-300"
+                  :class="isHighlighted(`cat-${ci}`, row) ? 'bg-green-700/30 ring-1 ring-green-500/60' : ''"
+                >
+                  <td class="border border-green-700/30 px-1 py-0.5 text-green-300 font-heading whitespace-nowrap">
+                    {{ rangeLabel(row) }}
+                  </td>
+                  <td class="border border-green-700/30 px-1 py-0.5 text-green-300">
+                    {{ t(`vtt.oracles.structures.items.${row.common}`) }}
+                  </td>
+                  <td class="border border-green-700/30 px-1 py-0.5 text-green-200">
+                    {{ t(`vtt.oracles.structures.items.${row.uncommon}`) }}
+                  </td>
+                  <td class="border border-green-700/30 px-1 py-0.5 text-red-300">
+                    {{ t(`vtt.oracles.structures.items.${row.rare}`) }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </template>
-      </template>
-
-      <h3 class="text-sm font-heading font-semibold text-yellow-400 mb-2 mt-4">
-        {{ t('vtt.oracles.structures.categories.unique') }}
-      </h3>
-
-      <table class="w-full text-xs border-collapse">
-        <thead>
-          <tr class="bg-yellow-900/40">
-            <th class="border border-yellow-700/30 px-2 py-1 text-yellow-400 font-heading text-left w-12">
-              {{ t('vtt.oracles.structures.d20') }}
-            </th>
-            <th class="border border-yellow-700/30 px-2 py-1 text-yellow-400 font-heading text-left">
-              {{ t('vtt.oracles.structures.structure') }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(row, i) in uniqueRows"
-            :key="i"
-            class="even:bg-yellow-900/10"
-          >
-            <td class="border border-yellow-700/30 px-2 py-1 text-yellow-300 font-heading">
-              {{ rangeLabel(row) }}
-            </td>
-            <td class="border border-yellow-700/30 px-2 py-1 text-white">
-              {{ t(row.resultKey) }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      </div>
     </div>
   </div>
 </template>

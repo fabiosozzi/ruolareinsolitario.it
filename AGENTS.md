@@ -80,6 +80,10 @@ I colori `--muted`, `--card`, `--border`, `--accent`, ecc. saranno derivati dall
 └── tsconfig.json
 ```
 
+## Git
+
+- **Commit e push solo su richiesta esplicita.** Non fare mai commit o push senza chiedere prima il permesso.
+
 ## Convenzioni di sviluppo
 
 1. **Tutti i componenti UI devono usare shadcn-vue.** Non scrivere CSS custom per bottoni, input, card, etc. — usa i componenti da `components/ui/` e personalizzali con le `class` di Tailwind.
@@ -130,6 +134,10 @@ export default {
 - Footer
 
 ### `/guide`, `/recensioni`, `/strumenti` (da creare in futuro)
+
+## Fix ricorrenti
+
+- **`<component :is="string" />` non risolve i componenti Nuxt.** Nuxt auto-importa i componenti nei template ma NON li registra globalmente. Per usarli dinamicamente serve una mappa esplicita con `defineAsyncComponent` (vedi `OraclesPanel.vue`).
 
 ## Comandi sviluppo
 
