@@ -246,48 +246,50 @@ const filteredMaps = computed(() => {
           <input
             v-model="searchQuery"
             :placeholder="t('vtt.maps.search')"
-            class="flex-1 px-3 py-1.5 text-xs bg-black/50 border border-yellow-700/50 rounded text-yellow-200 outline-none focus:border-yellow-500/60 transition-colors placeholder-yellow-200/30"
+            class="flex-1 px-3 py-1.5 text-sm bg-black/50 border border-yellow-700/50 rounded text-yellow-200 outline-none focus:border-yellow-500/60 transition-colors placeholder-yellow-200/30"
           />
           <label
-            class="shrink-0 px-3 py-1.5 text-xs font-heading bg-yellow-800/40 hover:bg-yellow-700/60 border border-yellow-700/50 rounded transition-colors cursor-pointer"
+            class="shrink-0 px-3 py-1.5 text-sm font-heading bg-yellow-800/40 hover:bg-yellow-700/60 border border-yellow-700/50 rounded transition-colors cursor-pointer"
           >
             {{ t('vtt.maps.upload') }}
             <input type="file" accept="image/*" multiple class="hidden" @change="handleFileInput" />
           </label>
         </div>
 
-        <div v-if="maps.length" class="flex-1 overflow-y-auto space-y-2">
-          <div
-            v-for="map in filteredMaps"
-            :key="map.id"
-            class="group flex gap-3 p-2 rounded border border-yellow-700/30 cursor-pointer hover:border-yellow-500/60 transition-colors"
-            @click="selectedMap = map.id"
-          >
-            <img
-              :src="map.dataUrl"
-              :alt="map.name"
-              class="w-24 h-16 object-cover rounded shrink-0"
-            />
-            <div class="flex-1 min-w-0">
-              <div class="flex items-start justify-between gap-2">
-                <div class="text-xs text-yellow-200 font-heading truncate">{{ map.name }}</div>
-                <div class="flex gap-1.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <span
-                    class="text-yellow-400/70 hover:text-yellow-300 cursor-pointer text-xs"
-                    @click.stop="openEdit(map)"
-                  >✎</span>
-                  <span
-                    class="text-red-400 hover:text-red-300 cursor-pointer text-xs"
-                    @click.stop="removeMap(map.id)"
-                  >×</span>
-                </div>
+        <div v-if="maps.length" class="flex-1 overflow-y-auto">
+          <div class="grid grid-cols-4 gap-3">
+            <div
+              v-for="map in filteredMaps"
+              :key="map.id"
+              class="bg-black/40 backdrop-blur-sm border border-yellow-700/30 rounded-lg overflow-hidden cursor-pointer hover:border-yellow-500/60 transition-colors"
+              @click="selectedMap = map.id"
+            >
+              <div class="aspect-video overflow-hidden">
+                <img
+                  :src="map.dataUrl"
+                  :alt="map.name"
+                  class="w-full h-full object-cover"
+                />
               </div>
-              <p
-                v-if="map.description"
-                class="text-[10px] text-yellow-200/50 leading-tight line-clamp-2 mt-0.5"
-              >
-                {{ map.description }}
-              </p>
+              <div class="p-2">
+                <div class="text-sm text-yellow-200 font-heading truncate">{{ map.name }}</div>
+                <p
+                  v-if="map.description"
+                  class="text-xs text-yellow-200/50 leading-tight line-clamp-1 mt-0.5"
+                >
+                  {{ map.description }}
+                </p>
+              </div>
+              <div class="flex gap-1 px-2 pb-2">
+                <button
+                  class="flex items-center gap-1 px-2 py-1 text-xs text-yellow-400/70 hover:text-yellow-300 bg-yellow-900/30 hover:bg-yellow-800/40 rounded transition-colors cursor-pointer"
+                  @click.stop="openEdit(map)"
+                >✎ {{ t('vtt.maps.edit') }}</button>
+                <button
+                  class="flex items-center gap-1 px-2 py-1 text-xs text-red-400/70 hover:text-red-300 bg-red-900/20 hover:bg-red-800/30 rounded transition-colors cursor-pointer"
+                  @click.stop="removeMap(map.id)"
+                >× {{ t('vtt.maps.delete') }}</button>
+              </div>
             </div>
           </div>
         </div>
@@ -317,11 +319,11 @@ const filteredMaps = computed(() => {
         />
       </div>
 
-      <div class="absolute top-2 left-2 bg-black/70 text-xs text-yellow-200 px-2 py-1 rounded pointer-events-none max-w-[60%]">
+      <div class="absolute top-2 left-2 bg-black/70 text-sm text-yellow-200 px-2 py-1 rounded pointer-events-none max-w-[60%]">
         <div class="truncate font-heading">{{ activeMap.name }}</div>
         <p
           v-if="activeMap.description"
-          class="text-[10px] text-yellow-200/60 mt-0.5 leading-tight line-clamp-3"
+          class="text-xs text-yellow-200/60 mt-0.5 leading-tight line-clamp-3"
         >
           {{ activeMap.description }}
         </p>
