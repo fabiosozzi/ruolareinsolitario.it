@@ -32,6 +32,11 @@ onMounted(() => {
   loadMaps()
   const ro = new ResizeObserver(updateImgRect)
   if (containerRef.value) ro.observe(containerRef.value)
+  window.addEventListener('keydown', handleKeydown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeydown)
 })
 
 watch(dialogOpen, (open) => {
@@ -52,6 +57,12 @@ function updateImgRect() {
   imgRect.y = ir.top - cr.top
   imgRect.w = ir.width
   imgRect.h = ir.height
+}
+
+function handleKeydown(e: KeyboardEvent) {
+  if (e.key === 'Escape' && selectedMap.value) {
+    selectedMap.value = null
+  }
 }
 
 function handleDrop(e: DragEvent) {
@@ -327,6 +338,9 @@ const filteredMaps = computed(() => {
         >
           {{ activeMap.description }}
         </p>
+      </div>
+      <div class="absolute bottom-2 left-1/2 -translate-x-1/2 bg-black/70 text-xs text-yellow-400/60 px-2 py-1 rounded pointer-events-none whitespace-nowrap">
+        {{ t('vtt.maps.clickToPlace') }}
       </div>
       <button
         class="absolute top-2 right-2 px-2 py-1 text-xs bg-black/70 text-yellow-400 hover:text-white rounded cursor-pointer z-20"

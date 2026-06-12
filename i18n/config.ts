@@ -45,6 +45,7 @@ export default defineI18nConfig(() => ({
           uploadModalTitle: "Dettagli mappa",
           editModalTitle: "Modifica mappa",
           confirmDelete: "Rimuovi mappa?",
+          clickToPlace: "Clicca sulla mappa per posizionare il marker",
         },
         sidebar: {
           oracles: "Oracoli",
@@ -95,6 +96,7 @@ export default defineI18nConfig(() => ({
           uploadModalTitle: "Map details",
           editModalTitle: "Edit map",
           confirmDelete: "Remove map?",
+          clickToPlace: "Click on the map to place the marker",
         },
         sidebar: {
           oracles: "Oracles",
