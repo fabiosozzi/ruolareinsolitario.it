@@ -103,9 +103,6 @@ function clearSession() {
   session.value = []
 }
 
-const grandTotal = computed(() =>
-  session.value.reduce((sum, r) => sum + r.total, 0)
-)
 </script>
 
 <template>
@@ -232,7 +229,6 @@ const grandTotal = computed(() =>
               >
                 <VttDiceFace :value="v" type="d20" />
               </div>
-              <span class="text-xs text-yellow-200">→ {{ r.total }}</span>
             </div>
             <div class="text-xs mt-1">
               <span :class="r.passed ? 'text-green-400' : 'text-red-400'">
@@ -265,7 +261,6 @@ const grandTotal = computed(() =>
                 :value="v"
                 type="d20"
               />
-              <span class="text-xs text-yellow-200">→ {{ r.total }}</span>
             </div>
           </template>
 
@@ -287,10 +282,6 @@ const grandTotal = computed(() =>
         </div>
       </div>
 
-      <div class="text-sm flex items-center gap-2 pt-1.5 border-t border-yellow-700/30">
-        <span class="text-yellow-400 font-heading font-semibold">{{ t('vtt.dice.total') }}</span>
-        <span class="text-white font-bold">{{ grandTotal }}</span>
-      </div>
 
       <button
         class="mt-2 w-full px-2 py-1 text-xs text-yellow-400/70 hover:text-yellow-300 border border-yellow-700/30 hover:border-yellow-600/50 rounded transition-colors cursor-pointer"

@@ -12,9 +12,6 @@ export default {
   ],
   diceComponent: 'VttFalloutDicePanel',
   oracles: [
-    { id: 'random-encounter', label: 'Incontro Casuale', component: 'VttOraclesFallout2d20RandomEncounter' },
-    { id: 'scavenging', label: 'Recupero Risorse', component: 'VttOraclesFallout2d20Scavenging' },
-    { id: 'location-gen', label: 'Genera Locazione', component: 'VttOraclesFallout2d20LocationGen' },
-    { id: 'npc-gen', label: 'Genera PNG', component: 'VttOraclesFallout2d20NpcGen' },
+    { id: 'structures', label: 'Strutture', component: 'VttOraclesFallout2d20Structures' },
   ],
 } satisfies VttGameConfig
