@@ -21,7 +21,7 @@ const { t } = useI18n()
       </div>
 
       <div class="w-72 flex flex-col gap-2 min-h-0">
-        <component :is="config.diceComponent" v-if="config.diceComponent" />
+        <VttFalloutDicePanel v-if="config.diceComponent === 'VttFalloutDicePanel'" />
         <VttDiceRoller v-else :dice="config.dice" />
         <div class="flex-1 min-h-0">
           <VttSidebar :oracles="config.oracles" />
