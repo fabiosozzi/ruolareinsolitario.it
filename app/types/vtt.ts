@@ -18,6 +18,7 @@ export interface VttGameConfig {
   background: string
   markerIcon: string
   dice: DiceConfig[]
+  diceComponent?: string
   oracles: OracleConfig[]
 }
 
@@ -27,7 +28,12 @@ export interface DiceRollResult {
   values: number[]
   total: number
   icon?: boolean
+  icons?: boolean[]
   timestamp: number
+  successes?: number
+  successesRequired?: number
+  passed?: boolean
+  effects?: number
 }
 
 export interface MapMarker {

@@ -10,6 +10,7 @@ export default {
     { type: 'd20', label: 'D20', sides: 20, defaultCount: 1 },
     { type: 'fal-cd', label: 'CD', sides: 6, defaultCount: 1 },
   ],
+  diceComponent: 'VttFalloutDicePanel',
   oracles: [
     { id: 'random-encounter', label: 'Incontro Casuale', component: 'VttOraclesFallout2d20RandomEncounter' },
     { id: 'scavenging', label: 'Recupero Risorse', component: 'VttOraclesFallout2d20Scavenging' },
