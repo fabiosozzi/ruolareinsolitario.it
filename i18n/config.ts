@@ -23,6 +23,33 @@ export default defineI18nConfig(() => ({
       footer: {
         copyright: "© {year} ruolareinsolitario.it",
       },
+      vtt: {
+        title: "Tavolo Virtuale",
+        selectGame: "Scegli un sistema di gioco",
+        dice: {
+          roll: "Tira",
+          result: "Risultato",
+          total: "Totale",
+        },
+        maps: {
+          upload: "Carica mappa",
+          noMaps: "Nessuna mappa caricata",
+          dragAndDrop: "Trascina un'immagine qui",
+          search: "Cerca mappa...",
+          description: "Descrizione",
+          edit: "Modifica",
+          save: "Salva",
+          cancel: "Annulla",
+          fileName: "Nome",
+          uploadModalTitle: "Dettagli mappa",
+          editModalTitle: "Modifica mappa",
+          confirmDelete: "Rimuovi mappa?",
+        },
+        sidebar: {
+          oracles: "Oracoli",
+          close: "Chiudi",
+        },
+      },
     },
     en: {
       navbar: {
@@ -44,6 +71,33 @@ export default defineI18nConfig(() => ({
       },
       footer: {
         copyright: "© {year} ruolareinsolitario.it",
+      },
+      vtt: {
+        title: "Virtual Tabletop",
+        selectGame: "Choose a game system",
+        dice: {
+          roll: "Roll",
+          result: "Result",
+          total: "Total",
+        },
+        maps: {
+          upload: "Upload map",
+          noMaps: "No maps uploaded",
+          dragAndDrop: "Drop an image here",
+          search: "Search map...",
+          description: "Description",
+          edit: "Edit",
+          save: "Save",
+          cancel: "Cancel",
+          fileName: "Name",
+          uploadModalTitle: "Map details",
+          editModalTitle: "Edit map",
+          confirmDelete: "Remove map?",
+        },
+        sidebar: {
+          oracles: "Oracles",
+          close: "Close",
+        },
       },
     },
   },
