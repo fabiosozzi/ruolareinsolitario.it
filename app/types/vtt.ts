@@ -19,10 +19,12 @@ export interface VttGameConfig {
   markerIcon: string
   dice: DiceConfig[]
   diceComponent?: string
+  characterComponent?: string
   oracles: OracleConfig[]
 }
 
 export interface DiceRollResult {
+  id: string
   type: string
   label: string
   values: number[]
@@ -34,6 +36,19 @@ export interface DiceRollResult {
   successesRequired?: number
   passed?: boolean
   effects?: number
+}
+
+export interface Weapon {
+  id: string
+  name: string
+  type: string
+  damage: string
+  damageType: string
+  range: string
+  qualities: string
+  specialEffects: string
+  ammo: string
+  capacity: number
 }
 
 export interface MapMarker {

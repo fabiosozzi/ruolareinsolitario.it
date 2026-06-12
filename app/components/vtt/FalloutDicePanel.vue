@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import type { DiceRollResult } from '~/types/vtt'
+import { rollDie as sharedRollDie, rollChallengeDie } from '~/utils/dice'
 
 const { t } = useI18n()
+const { isOpen: isOracleOpen } = useVttSidebar()
 
 const mode = ref<'prova' | 'danni' | 'custom'>('prova')
+
+watch(isOracleOpen, (open) => {
+  if (open) mode.value = 'custom'
+})
 
 const provaCount = ref(1)
 const nb = ref(7)
@@ -16,18 +22,15 @@ const customCD = ref(0)
 
 const session = ref<DiceRollResult[]>([])
 
-function rollDie(sides: number): number {
-  return Math.floor(Math.random() * sides) + 1
-}
-
 function rollProva() {
   const values: number[] = []
   for (let i = 0; i < provaCount.value; i++) {
-    values.push(rollDie(20))
+    values.push(sharedRollDie(20))
   }
   const successes = values.filter((v) => v <= nb.value).length
   const passed = successes >= successiRichiesti.value
   session.value.unshift({
+    id: crypto.randomUUID(),
     type: 'prova',
     label: `${provaCount.value}D20`,
     values,
@@ -37,24 +40,19 @@ function rollProva() {
     successesRequired: successiRichiesti.value,
     passed,
   })
-}
-
-function rollCD(): { value: number; icon: boolean } {
-  const raw = rollDie(6)
-  if (raw <= 2) return { value: raw === 1 ? 1 : 2, icon: false }
-  if (raw >= 5) return { value: 1, icon: true }
-  return { value: 0, icon: false }
+  if (session.value.length > 50) session.value = session.value.slice(0, 50)
 }
 
 function rollDanni() {
   const values: number[] = []
   const icons: boolean[] = []
   for (let i = 0; i < danniCount.value; i++) {
-    const r = rollCD()
+    const r = rollChallengeDie()
     values.push(r.value)
     icons.push(r.icon)
   }
   session.value.unshift({
+    id: crypto.randomUUID(),
     type: 'danni',
     label: `${danniCount.value}CD`,
     values,
@@ -63,15 +61,17 @@ function rollDanni() {
     icons,
     effects: icons.filter(Boolean).length,
   })
+  if (session.value.length > 50) session.value = session.value.slice(0, 50)
 }
 
 function rollCustom() {
   if (customD20.value > 0) {
     const values: number[] = []
     for (let i = 0; i < customD20.value; i++) {
-      values.push(rollDie(20))
+      values.push(sharedRollDie(20))
     }
     session.value.unshift({
+      id: crypto.randomUUID(),
       type: 'd20',
       label: `${customD20.value}D20`,
       values,
@@ -83,11 +83,12 @@ function rollCustom() {
     const values: number[] = []
     const icons: boolean[] = []
     for (let i = 0; i < customCD.value; i++) {
-      const r = rollCD()
+      const r = rollChallengeDie()
       values.push(r.value)
       icons.push(r.icon)
     }
     session.value.unshift({
+      id: crypto.randomUUID(),
       type: 'custom-cd',
       label: `${customCD.value}CD`,
       values,
@@ -97,20 +98,22 @@ function rollCustom() {
       effects: icons.filter(Boolean).length,
     })
   }
+  if (session.value.length > 50) session.value = session.value.slice(0, 50)
+}
+
+function removeRoll(index: number) {
+  session.value.splice(index, 1)
 }
 
 function clearSession() {
   session.value = []
 }
 
-const grandTotal = computed(() =>
-  session.value.reduce((sum, r) => sum + r.total, 0)
-)
 </script>
 
 <template>
-  <div class="bg-black/70 backdrop-blur-sm border border-yellow-700/50 rounded-lg p-3 text-white">
-    <h3 class="text-sm font-heading font-semibold text-yellow-400 mb-3">
+  <div class="bg-black/70 backdrop-blur-sm border border-green-700/50 rounded-lg p-3 text-white">
+    <h3 class="text-base font-heading font-semibold text-green-400 mb-3">
       {{ t('vtt.dice.roll') }}
     </h3>
 
@@ -118,11 +121,11 @@ const grandTotal = computed(() =>
       <button
         v-for="m in (['prova', 'danni', 'custom'] as const)"
         :key="m"
-        class="flex-1 px-2 py-1.5 text-xs font-heading border rounded transition-colors cursor-pointer"
+        class="flex-1 px-2 py-1.5 text-base font-heading border rounded transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-green-400/60 active:scale-[0.98]"
         :class="
           mode === m
-            ? 'bg-yellow-700/60 border-yellow-500 text-white'
-            : 'bg-yellow-900/30 border-yellow-800/40 text-yellow-300/80 hover:bg-yellow-800/50'
+            ? 'bg-green-700/60 border-green-500 text-white'
+            : 'bg-green-900/30 border-green-800/40 text-green-300/80 hover:bg-green-800/50'
         "
         @click="mode = m"
       >
@@ -132,37 +135,37 @@ const grandTotal = computed(() =>
 
     <div v-if="mode === 'prova'" class="flex flex-wrap gap-2 items-end mb-3">
       <div>
-        <label class="text-[10px] text-yellow-400/70 font-heading">{{ t('vtt.dice.count') }} D20</label>
+        <label class="text-base text-green-300/80 font-heading">{{ t('vtt.dice.count') }} D20</label>
         <input
           v-model.number="provaCount"
           type="number"
           min="1"
           max="5"
-          class="block w-16 px-2 py-1 mt-0.5 text-sm bg-black/50 border border-yellow-700/50 rounded text-yellow-200 outline-none focus:border-yellow-500/60 transition-colors"
+          class="block w-16 px-2 py-1 mt-0.5 text-base bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors"
         />
       </div>
       <div>
-        <label class="text-[10px] text-yellow-400/70 font-heading">{{ t('vtt.dice.nb') }}</label>
+        <label class="text-base text-green-300/80 font-heading">{{ t('vtt.dice.nb') }}</label>
         <input
           v-model.number="nb"
           type="number"
           min="1"
           max="20"
-          class="block w-16 px-2 py-1 mt-0.5 text-sm bg-black/50 border border-yellow-700/50 rounded text-yellow-200 outline-none focus:border-yellow-500/60 transition-colors"
+          class="block w-16 px-2 py-1 mt-0.5 text-base bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors"
         />
       </div>
       <div>
-        <label class="text-[10px] text-yellow-400/70 font-heading">{{ t('vtt.dice.successesRequired') }}</label>
+        <label class="text-base text-green-300/80 font-heading">{{ t('vtt.dice.successesRequired') }}</label>
         <input
           v-model.number="successiRichiesti"
           type="number"
           min="1"
           max="10"
-          class="block w-16 px-2 py-1 mt-0.5 text-sm bg-black/50 border border-yellow-700/50 rounded text-yellow-200 outline-none focus:border-yellow-500/60 transition-colors"
+          class="block w-16 px-2 py-1 mt-0.5 text-base bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors"
         />
       </div>
       <button
-        class="px-3 py-1.5 text-sm font-heading bg-yellow-700/60 hover:bg-yellow-600/70 border border-yellow-700/50 rounded text-yellow-100 cursor-pointer"
+        class="px-3 py-1.5 text-base font-heading bg-green-700/60 hover:bg-green-600/70 border border-green-700/50 rounded text-green-100 cursor-pointer focus-visible:ring-2 focus-visible:ring-green-400/60 active:scale-[0.98]"
         @click="rollProva"
       >
         {{ t('vtt.dice.roll') }}
@@ -171,17 +174,17 @@ const grandTotal = computed(() =>
 
     <div v-if="mode === 'danni'" class="flex flex-wrap gap-2 items-end mb-3">
       <div>
-        <label class="text-[10px] text-yellow-400/70 font-heading">{{ t('vtt.dice.count') }} CD</label>
+        <label class="text-base text-green-300/80 font-heading">{{ t('vtt.dice.count') }} CD</label>
         <input
           v-model.number="danniCount"
           type="number"
           min="1"
           max="10"
-          class="block w-16 px-2 py-1 mt-0.5 text-sm bg-black/50 border border-yellow-700/50 rounded text-yellow-200 outline-none focus:border-yellow-500/60 transition-colors"
+          class="block w-16 px-2 py-1 mt-0.5 text-base bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors"
         />
       </div>
       <button
-        class="px-3 py-1.5 text-sm font-heading bg-yellow-700/60 hover:bg-yellow-600/70 border border-yellow-700/50 rounded text-yellow-100 cursor-pointer"
+        class="px-3 py-1.5 text-base font-heading bg-green-700/60 hover:bg-green-600/70 border border-green-700/50 rounded text-green-100 cursor-pointer focus-visible:ring-2 focus-visible:ring-green-400/60 active:scale-[0.98]"
         @click="rollDanni"
       >
         {{ t('vtt.dice.roll') }}
@@ -190,38 +193,45 @@ const grandTotal = computed(() =>
 
     <div v-if="mode === 'custom'" class="flex flex-wrap gap-2 items-end mb-3">
       <div>
-        <label class="text-[10px] text-yellow-400/70 font-heading">D20</label>
+        <label class="text-base text-green-300/80 font-heading">D20</label>
         <input
           v-model.number="customD20"
           type="number"
           min="0"
           max="5"
-          class="block w-16 px-2 py-1 mt-0.5 text-sm bg-black/50 border border-yellow-700/50 rounded text-yellow-200 outline-none focus:border-yellow-500/60 transition-colors"
+          class="block w-16 px-2 py-1 mt-0.5 text-base bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors"
         />
       </div>
       <div>
-        <label class="text-[10px] text-yellow-400/70 font-heading">CD</label>
+        <label class="text-base text-green-300/80 font-heading">CD</label>
         <input
           v-model.number="customCD"
           type="number"
           min="0"
           max="10"
-          class="block w-16 px-2 py-1 mt-0.5 text-sm bg-black/50 border border-yellow-700/50 rounded text-yellow-200 outline-none focus:border-yellow-500/60 transition-colors"
+          class="block w-16 px-2 py-1 mt-0.5 text-base bg-black/50 border border-green-700/50 rounded text-green-200 outline-none focus:border-green-500/60 transition-colors"
         />
       </div>
       <button
-        class="px-3 py-1.5 text-sm font-heading bg-yellow-700/60 hover:bg-yellow-600/70 border border-yellow-700/50 rounded text-yellow-100 cursor-pointer"
+        class="px-3 py-1.5 text-base font-heading bg-green-700/60 hover:bg-green-600/70 border border-green-700/50 rounded text-green-100 cursor-pointer focus-visible:ring-2 focus-visible:ring-green-400/60 active:scale-[0.98]"
         @click="rollCustom"
       >
         {{ t('vtt.dice.roll') }}
       </button>
     </div>
 
-    <div v-if="session.length" class="border-t border-yellow-700/30 pt-2">
-      <div class="text-xs text-yellow-500/70 font-heading mb-1">STORICO</div>
+    <div v-if="session.length" class="border-t border-green-700/30 pt-2">
+      <div class="text-base text-green-300/80 font-heading mb-1">{{ t('vtt.dice.history') }}</div>
 
-      <div class="max-h-48 overflow-y-auto space-y-2 mb-2">
-        <div v-for="(r, i) in session" :key="i" class="pb-2 border-b border-yellow-700/15 last:border-0">
+      <div class="max-h-48 overflow-y-auto overflow-x-hidden p-1 mb-2 space-y-2 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-green-900/30 [&::-webkit-scrollbar-thumb]:bg-green-700/50 [&::-webkit-scrollbar-thumb]:rounded">
+        <div v-for="r in session" :key="r.id" class="relative p-3 border-t border-green-700/15 first:border-t-0 transition-all duration-300" :class="session[0]?.id === r.id ? 'ring-1 ring-green-400/60 rounded bg-green-900/20' : ''">
+          <button
+            class="absolute top-1 right-1 w-5 h-5 flex items-center justify-center text-[10px] text-green-500/50 hover:text-red-400 transition-colors cursor-pointer"
+            @click="removeRoll(i)"
+            :aria-label="t('vtt.dice.deleteRoll')"
+          >
+            ✕
+          </button>
           <template v-if="r.type === 'prova'">
             <div class="flex gap-1 items-center flex-wrap">
               <div
@@ -232,9 +242,8 @@ const grandTotal = computed(() =>
               >
                 <VttDiceFace :value="v" type="d20" />
               </div>
-              <span class="text-xs text-yellow-200">→ {{ r.total }}</span>
             </div>
-            <div class="text-xs mt-1">
+            <div class="text-base mt-1">
               <span :class="r.passed ? 'text-green-400' : 'text-red-400'">
                 {{ r.successes }}/{{ r.successesRequired }} — {{ r.passed ? t('vtt.dice.passed') : t('vtt.dice.failed') }}
               </span>
@@ -250,9 +259,9 @@ const grandTotal = computed(() =>
                 type="fal-cd"
                 :icon="r.icons?.[j] ?? false"
               />
-              <span class="text-xs text-yellow-200">→ {{ r.total }} {{ t('vtt.dice.damage') }}</span>
+              <span class="text-base text-green-200">→ {{ r.total }} {{ t('vtt.dice.damage') }}</span>
             </div>
-            <div class="text-xs text-yellow-200/50 mt-1">
+            <div class="text-base text-green-200/50 mt-1">
               {{ t('vtt.dice.effects') }}: {{ r.effects }}
             </div>
           </template>
@@ -265,7 +274,6 @@ const grandTotal = computed(() =>
                 :value="v"
                 type="d20"
               />
-              <span class="text-xs text-yellow-200">→ {{ r.total }}</span>
             </div>
           </template>
 
@@ -278,29 +286,25 @@ const grandTotal = computed(() =>
                 type="fal-cd"
                 :icon="r.icons?.[j] ?? false"
               />
-              <span class="text-xs text-yellow-200">→ {{ r.total }}</span>
+              <span class="text-base text-green-200">→ {{ r.total }}</span>
             </div>
-            <div class="text-xs text-yellow-200/50 mt-1">
+            <div class="text-base text-green-200/50 mt-1">
               {{ t('vtt.dice.effects') }}: {{ r.effects }}
             </div>
           </template>
         </div>
       </div>
 
-      <div class="text-sm flex items-center gap-2 pt-1.5 border-t border-yellow-700/30">
-        <span class="text-yellow-400 font-heading font-semibold">{{ t('vtt.dice.total') }}</span>
-        <span class="text-white font-bold">{{ grandTotal }}</span>
-      </div>
 
       <button
-        class="mt-2 w-full px-2 py-1 text-xs text-yellow-400/70 hover:text-yellow-300 border border-yellow-700/30 hover:border-yellow-600/50 rounded transition-colors cursor-pointer"
+        class="mt-2 w-full px-2 py-1 text-base text-green-300/80 hover:text-green-300 border border-green-700/30 hover:border-green-600/50 rounded transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-green-400/60"
         @click="clearSession"
       >
         {{ t('vtt.dice.clear') }}
       </button>
     </div>
 
-    <div v-else class="text-xs text-yellow-200/40 italic border-t border-yellow-700/30 pt-2">
+    <div v-else class="text-base text-green-200/40 italic border-t border-green-700/30 pt-2">
       —
     </div>
   </div>

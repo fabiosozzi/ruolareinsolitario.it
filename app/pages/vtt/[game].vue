@@ -8,6 +8,13 @@ useHead({
 })
 
 const { t } = useI18n()
+const { reset } = useVttSidebar()
+const { clearHistory } = useDiceRoller()
+
+onUnmounted(() => {
+  reset()
+  clearHistory()
+})
 </script>
 
 <template>
